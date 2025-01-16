@@ -1,0 +1,28 @@
+# docker-compose file for running phpMyAdmin and MySQL 5.6 (with persistent storage)
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:5.6
+    container_name: mysql
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=shoplify
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  # PhpMyAdmin. Graphical Interface for MySQL
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    ports:
+      - 8888:80
+    depends_on:
+      - mysql
